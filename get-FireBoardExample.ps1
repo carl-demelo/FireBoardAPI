@@ -1,7 +1,9 @@
-$OutputFilePath = 'C:\FireBoard\Output\'  + (Get-Date -Format 'yyyyMMddHHmmss') + '.xlsx'
+param (
+    [Parameter()]
+    [string]$FilePath =".\"
+    , [string]$TableStyle = 'Medium3'
+)
 Import-Module FireBoardAPI
-
-$TableStyle = 'Medium3'
 
 $APIKey = Get-FireboardAPIKey
 $Session = get-FireboardSessionList -APIKey $APIKey | Select-Object Created, title, Description , Start_Time, End_Time, Duration, id | Out-GridView -Title 'Fireboard Sessions' -PassThru
@@ -33,7 +35,7 @@ foreach ($ChannelID in $($sessionts.channel_id | Select-Object -Unique) ) {
     }
 }
 
-$FileName = "$($OutputFilePath)FireBoardSessionDetail_$(Get-Date -Format 'yyyyMMddHHmmss').xlsx" 
+$FileName = "$($FilePath)FireBoardSessionDetail_$(Get-Date -Format 'yyyyMMddHHmmss').xlsx" 
 $Sheet = 'Summary'
 Write-Information "Adding sheet $($Sheet) to workbook $($FileName)"
 $Parameters = @{
