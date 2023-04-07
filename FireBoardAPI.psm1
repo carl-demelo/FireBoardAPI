@@ -47,10 +47,8 @@ function convert-DataRowToHashTable {
         foreach ($Column in $Columns) {
             $HashTable.Add($Column.Name, $($DataRow.$($Column.Name)) )
         }
+        $HashTable
     }
-end {
-    $HashTable
-}
 }
 function Convert-HashTableToDataTable {
     <#
@@ -231,8 +229,6 @@ function ConvertFrom-UnixTime {
     )
     process {
     $epoch = New-Object System.DateTime 1970, 1, 1, 0, 0, 0, 0
-    }
-    end{
     [datetime] $epoch.AddSeconds($UnixTime)
     }
 }
