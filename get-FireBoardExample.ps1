@@ -49,29 +49,5 @@ Add-ConditionalFormatting -Worksheet $WSObject -Range "D2:D10000" -DataBarColor 
 
 $Excel.Save()
 
-<# # Create our chart parameters
-$chartDefinition = @{
-    YRange   = 'Temperature'
-    XRange   = 'DateTime'
-    Title    = 'Temperature over Time'
-    Column   = 7
-    Row      = 1
-    NoLegend = $false
-    Height   = 225
-}
-$Chart = New-ExcelChartDefinition  @chartDefinition 
-
-$params = @{
-    ExcelPackage         = $Excel
-    ExcelChartDefinition = $chart
-    WorksheetName        = $WorkSheet
-    AutoNameRange        = $true
-    Show                 = $true 
-}
-Export-Excel @params #>
- #>
-# $WSObject = $Excel.Workbook.Worksheets[$Sheet]
-# Add-ConditionalFormatting -Worksheet $WSObject -Range $($WSObject.Columns."Y") -DataBarColor Red
 $Excel.Save()
 Close-ExcelPackage -ExcelPackage $Excel -Show
-
