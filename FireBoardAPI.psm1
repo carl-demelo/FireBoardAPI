@@ -50,31 +50,6 @@ function convert-DataRowToHashTable {
         $HashTable
     }
 }
-function Convert-HashTableToDataTable {
-    <#
-    .SYNOPSIS
-       Returns a data set for a hash table passed in.  This is used to unpivot a data set.
-    #>
-    param(
-        $Hashtable
-    )
-    $DataTable = New-Object System.Data.DataTable
-
-    for ($Col = 0; $Col -lt $Hashtable[0].Keys.count; $Col++) {
-        $DataTable.Columns.Add($($Hashtable[0].Keys)[$Col]) | Out-Null
-    }
-
-    for ($row = 1; $row -lt $Hashtable.name.count; $row++) {
-        $dr = $DataTable.NewRow()
-        for ($RowCol = 0; $RowCol -lt $Hashtable[0].Keys.count; $RowCol++) {
-            if (-not [string]::isnullorempty($($($Hashtable[$row].Keys)[$RowCol]))) {
-                $dr.$($($Hashtable[$row].Keys)[$RowCol]) = $($($Hashtable[$row].Values)[$RowCol])
-            }
-        }
-        $DataTable.Rows.Add($dr)
-    }
-    return $DataTable
-}
 function Get-FireboardAPIKey {
     <#
     .SYNOPSIS
