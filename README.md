@@ -9,3 +9,19 @@ To use the FireBoardAPI, you need to own a FireBoard device and have an active F
 If you're interested in exploring the capabilities of the FireBoardAPI, you can refer to the get-FireBoardExample.ps1 script for a usage example. Keep in mind that any FireBoard device that supports a cloud account should work with this module.
 
 In summary, FireBoardAPI is a powerful tool for anyone who owns a compatible grill and FireBoard controller. By utilizing this API, you can retrieve data from your grill and use it to make informed decisions about your cooking process
+
+The module is availale on the PowerShellGallery at https://www.powershellgallery.com/packages/FireBoardAPI/1.0.0.
+
+Simple installation:
+Minimum PowerShell version
+5.0
+
+Copy and Paste the following command to install this package using PowerShellGet More Info
+
+Install-Module -Name FireBoardAPI
+
+Author(s)
+Carl Demelo
+
+Copyright
+(c) Carl Demelo. All rights reserved.
