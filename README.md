@@ -7,7 +7,9 @@
 The FireBoard controller is compatible with various BBQ grills and smokers, including popular models from major brands such as Yoder Smokers, Weber Smokey Mountain Cooker, Big Green Egg, Traeger Pellet Grills, Pit Boss Pellet Grills, Green Mountain Grills, Kamado Joe, Oklahoma Joe's, and Napoleon Grills. However, it's important to note that not all models of these brands may be compatible, so it's best to check the specifications of both your grill and the FireBoard controller before making a purchase. Additionally, some models may require additional adapters or cables to connect the FireBoard controller to the grill.
 
 #### Requirements
-To use the FireBoardAPI, you need to own a FireBoard device and have an active Fireboard.io cloud account. 
+To use the FireBoardAPI, you need to own a FireBoard device and have an active Fireboard.io cloud account. Go to https://www.fireboard.com/ to see available cloud enabled products.
+
+After creating your account you will need to generate an API key.  This key is kept privately and is used as part of the authentication to the REST API.
 
 Once you have your account and API Key, you can explore some fo the commands with the get-FireBoardExample.ps1 script.  The script provides an example for connecting to your account and retrieving hardware metadata and session information. 
 
