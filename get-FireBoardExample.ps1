@@ -1,9 +1,10 @@
-Import-Module C:\Users\carld\OneDrive\Documents\VSCodeWorkspace\FireBoardAPI\FireBoardAPI.psm1
+$OutputFilePath = 'C:\FireBoard\Output\'  + (Get-Date -Format 'yyyyMMddHHmmss') + '.xlsx'
+Import-Module FireBoardAPI
 
 $TableStyle = 'Medium3'
 
 $APIKey = Get-FireboardAPIKey
-$Session = get-FireboardList -APIKey $APIKey -ListType 'sessions' | Select-Object Created, title, Description , Start_Time, End_Time, Duration, id | Out-GridView -Title 'Fireboard Sessions' -PassThru
+$Session = get-FireboardSessionList -APIKey $APIKey | Select-Object Created, title, Description , Start_Time, End_Time, Duration, id | Out-GridView -Title 'Fireboard Sessions' -PassThru
 
 $SessionSumary = get-FireboardSession -APIKey $APIKey -SessionID $($Session.id)
 
@@ -32,22 +33,39 @@ foreach ($ChannelID in $($sessionts.channel_id | Select-Object -Unique) ) {
     }
 }
 
-$FileName = "c:\temp\FireBoardSessionDetail_$(Get-Date -Format 'yyyyMMddHHmmss').xls" 
+$FileName = "$($OutputFilePath)FireBoardSessionDetail_$(Get-Date -Format 'yyyyMMddHHmmss').xlsx" 
 $Sheet = 'Summary'
 Write-Information "Adding sheet $($Sheet) to workbook $($FileName)"
-$Excel = $SessionSummaryHash.GetEnumerator() | Select-Object Name, Value | Export-Excel -Path $FileName -WorksheetName $Sheet -PassThru -AutoSize -TableName $Sheet 
+$Parameters = @{
+	Path = $FileName
+	WorksheetName = $Sheet
+	PassThru = $true
+	AutoSize = $true
+	TableName = $Sheet
+}
+$Excel = $SessionSummaryHash.GetEnumerator() | Select-Object Name, Value | Export-Excel @Parameters 
 
 $WSObject = $Excel.Workbook.Worksheets[$Sheet]
 Set-ExcelRange -Worksheet $WSObject  -Range "a1:z9000" -HorizontalAlignment Left
 $Excel.Save()
 $Sheet = 'TimeSeriesData'
 
-$Excel = $SessionTimeSeriesData | Select-Object DateTime, ChannelID, ChannelLabel, Temperature, DegreeType | Export-Excel -ExcelPackage $Excel -WorksheetName $Sheet -AutoSize -TableName $Sheet -TableStyle $TableStyle -PassThru -IncludePivotChart -ChartType Line
+$Parameters = @{
+	ExcelPackage = $Excel
+	WorksheetName = $Sheet
+	AutoSize = $true
+	TableName = $Sheet
+	TableStyle = $TableStyle
+	PassThru = $true
+	IncludePivotChart = $true
+	ChartType = 'Line'
+}
+$Excel = $SessionTimeSeriesData | Select-Object DateTime, ChannelID, ChannelLabel, Temperature, DegreeType | Export-Excel @Parameters
 # Apply some basic formatting
 $WSObject = $Excel.Workbook.Worksheets[$Sheet]
 Add-ConditionalFormatting -Worksheet $WSObject -Range "D2:D10000" -DataBarColor Red
 
 $Excel.Save()
 
-$Excel.Save()
 Close-ExcelPackage -ExcelPackage $Excel -Show
+
