@@ -10,5 +10,6 @@ See get-FireBoardExample.ps1 for example usage.  The get-FireBoardExample.ps1 sc
  Any fireboard device that supports a cloud account should work with this module.  
  
  Pre-requisites:
+ 
  You need to own a Fireboard device and have an active Fireboard.io cloud account.
  If you are using the example then install the ImportExcel module first: install-module ImportExcel
