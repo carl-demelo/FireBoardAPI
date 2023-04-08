@@ -1,6 +1,6 @@
 # Cooking with PowerShell!
 
-## The FireBoardAPI is a PowerShell-based API designed to interact with the FireBoard BBQ grill controller. This API enables users to retrieve data from BBQ grills that are equipped with a FireBoard control unit. The FireBoard is a device that logs time series temperature data for wood pellet BBQ grills, and some models can control the cooking temperature wirelessly.
+#### The FireBoardAPI is a PowerShell-based API designed to interact with the FireBoard BBQ grill controller. This API enables users to retrieve data from BBQ grills that are equipped with a FireBoard control unit. The FireBoard is a device that logs time series temperature data for wood pellet BBQ grills, and some models can control the cooking temperature wirelessly.
 
 
 
