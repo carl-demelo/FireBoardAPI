@@ -1,38 +1,4 @@
-function Convert-FromCurl {
-    <#
-.SYNOPSIS
-    A short one-line action-based description, e.g. 'Tests if a function is valid'
-.DESCRIPTION
-    A longer description of the function, its purpose, common use cases, etc.
-.NOTES
-    Information or caveats about the function e.g. 'This function is not supported in Linux'
-.LINK
-    Specify a URI to a help page, this will show when Get-Help -Online is used.
-.EXAMPLE
-    $CurlString =@"
-curl "https://fireboard.io/api/v1/sessions.json" -H "Authorization: Token 9944bb9966cc22cc9418ad846dd0e4bbdfc6ee4b"
-"@
-
-Convert-FromCurl -CurlString $CurlString
-
-Output:
-Invoke-RestMethod -Method POST -Uri 'https://localhost:8080/confluence/rest/api/content' -Verbose:$false -Headers @{
-    'Content-Type' = 'application/json'
-} -Body '{ "type":"page" ,"title":"A Test Page" , "space":{ "key":"SPACE" } , "ancestors" : [ { "id": "115328548" } ] ,"body":{ "storage":{ "value":"<h1>Child Macro Test</h1><p>Foo Bar Blah</p><p> <ac:structured-macro ac:name="children"> <ac:parameter ac:name="reverse">true</ac:parameter> <ac:parameter ac:name="sort">creation</ac:parameter> <ac:parameter ac:name="style">h4</ac:parameter> <ac:parameter ac:name="page"> <ac:link> <ri:page ri:content-title="Home"/> </ac:link> </ac:parameter> <ac:parameter ac:name="excerpt">none</ac:parameter> <ac:parameter ac:name="first">99</ac:parameter> <ac:parameter ac:name="depth">2</ac:parameter> <ac:parameter ac:name="all">true</ac:parameter> </ac:structured-macro> </p>","representation":"storage"}}}'
-
-#>
-
-    param(
-        [string]$CurlString
-    )
-    if (-not $(Get-Module Curl2PS)) {
-        Import-Module Curl2PS
-    }
-
-    <#  #>
-    ConvertTo-IRM $CurlString -CommandAsString
-}
-function convert-DataRowToHashTable {
+function convert-DataSetToHashTable {
     <#
     .SYNOPSIS
        Returns a hash table for data set passed in.  This is used to pivot a data set.
@@ -220,7 +186,7 @@ function ConvertTo-LocalTime {
     $DateTime.ToLocalTime()
     }
 }
-function add-HashTable {
+function join-HashTable {
     <#
     .SYNOPSIS
        Combines 2 hash tables into a single hash table

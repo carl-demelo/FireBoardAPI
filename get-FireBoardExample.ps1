@@ -20,7 +20,7 @@ Get the example script from GitHub:
     https://github.com/carl-demelo/FireBoardAPI
     
 Get the module from the PowerShell Gallery:
-    https://www.powershellgallery.com/packages/FireBoardAPI/1.0.0
+    https://www.powershellgallery.com/packages/FireBoardAPI/
 .EXAMPLE
     .\get-FireBoardExample.ps1 -FilePath "C:\Temp\" -TableStyle 'Medium3'
 #>
@@ -50,9 +50,9 @@ $SessionSumary = get-FireboardSession -APIKey $APIKey -SessionID $($Session.id)
 
 # Combine the session meta data and owner meta data into a single hash table
 $SessionSummaryHash = @{}
-$SessionSummaryHash = add-HashTable -Hash1 $SessionSummaryHash -Hash2 $(convert-DataRowToHashTable -DataRow $($SessionSumary | Select-Object Title, Description, Start_Time, End_Time, Duration, Active))
-$SessionSummaryHash = add-HashTable -Hash1 $SessionSummaryHash -Hash2 $(convert-DataRowToHashTable -DataRow $($SessionSumary.owner | Select-Object Username, Email))
-$SessionSummaryHash = add-HashTable -Hash1 $SessionSummaryHash -Hash2 $(convert-DataRowToHashTable -DataRow $($SessionSumary.devices | Select-Object Hardware_ID, Model, @{Name = 'GrillModelNumber'; Expression = { $_.title } }, Channel_Count))
+$SessionSummaryHash = join-HashTable -Hash1 $SessionSummaryHash -Hash2 $(convert-DataSetToHashTable -DataRow $($SessionSumary | Select-Object Title, Description, Start_Time, End_Time, Duration, Active))
+$SessionSummaryHash = join-HashTable -Hash1 $SessionSummaryHash -Hash2 $(convert-DataSetToHashTable -DataRow $($SessionSumary.owner | Select-Object Username, Email))
+$SessionSummaryHash = join-HashTable -Hash1 $SessionSummaryHash -Hash2 $(convert-DataSetToHashTable -DataRow $($SessionSumary.devices | Select-Object Hardware_ID, Model, @{Name = 'GrillModelNumber'; Expression = { $_.title } }, Channel_Count))
 $sessionts = get-FireboardSessionTimeSeries -APIKey $APIKey -SessionID $($Session.id) 
 
 # The session time series data is returned as an array of objects.  Each object contains the channel id, channel label, the x and y values.  The x values are the time stamps and the y values are the temperature values.  The x and y values are arrays of values.  The x and y values are combined into a single array of objects.  The array of objects is then passed to the Export-Excel module to create an Excel workbook with a single worksheet.  The worksheet is named 'TimeSeriesData' and the table name is also 'TimeSeriesData'.  The table is then exported to the Excel workbook.  The workbook is then saved and closed.
@@ -96,22 +96,73 @@ $Excel = $SessionSummaryHash.GetEnumerator() | Select-Object Name, Value | Expor
 $WSObject = $Excel.Workbook.Worksheets[$Sheet]
 Set-ExcelRange -Worksheet $WSObject  -Range "a1:z9000" -HorizontalAlignment Left
 $Excel.Save()
+
 $Sheet = 'TimeSeriesData'
 
 $Parameters = @{
 	ExcelPackage = $Excel
-	WorksheetName = $Sheet
+	WorksheetName = 'Summary'
+    StartRow = 15
+    StartColumn = 1
+    EndRow = 35
+    EndColumn = 20
 	AutoSize = $true
 	TableName = $Sheet
 	TableStyle = $TableStyle
 	PassThru = $true
-	IncludePivotChart = $true
-	ChartType = 'Line'
+   # PivotTableName    = "$($SheetName)Chart";
+    ChartType         = "Line";
+    IncludePivotChart = $true;
+    ShowCategory      = $false;
+    NoTotalsInPivot   = $true;
+   # PivotFilter       = "ChannelLabel";
+    PivotColumns      = "ChannelLabel";
+    PivotRows         = "DateTime";
+    PivotData         = @{ 'Temperature' = 'Average' };
+    LegendPosition    = 'Bottom';
 }
 $Excel = $SessionTimeSeriesData | Select-Object DateTime, ChannelID, ChannelLabel, Temperature, DegreeType | Export-Excel @Parameters
+
 # Apply some basic formatting
 $WSObject = $Excel.Workbook.Worksheets[$Sheet]
 Add-ConditionalFormatting -Worksheet $WSObject -Range "D2:D10000" -DataBarColor Red
+
+
+$Parameters = @{
+	WorkbookPath = $OutputFileName
+	WorksheetName = 'Summary'
+    ChartName = 'SummaryChart'
+
+	ReportData = $SessionTimeSeriesData
+	ChartTitle = 'Temperature'
+	ChartType = 'Line'
+	ChartSubTitle = 'Temperature vs Time'
+	ChartXAxisLabel = 'Time'
+	ChartYAxisLabel = 'Temperature'
+	ChartXAxisRange = 'DateTime'
+	ChartYAxisRange = 'Temperature'
+	ChartSeriesRange = 'ChannelLabel'
+	ChartLegendRange = 'ChannelLabel'
+	ChartLegendPosition = 'Right'
+	ChartLegendOverlay = 'False'
+	ChartLegendInclude = 'True'
+	ChartLegendExclude = 'False'
+	ChartLegendReverse = 'False'
+	ChartLegendFontSize = '11'
+	ChartLegendFontColor = 'Black'
+	ChartLegendFontBold = 'False'
+	ChartLegendFontItalic = 'False'
+	ChartLegendFontUnderline = 'False'
+	ChartLegendFontStrikeout = 'False'
+	ChartLegendFontName = 'Calibri'
+	ChartLegendFontCharset = '1'
+	ChartLegendFontVerticalAlign = 'Baseline'
+	ChartLegendFontHorizontalAlign = 'Left'
+	ChartLegendFontRotation = '0'
+	ChartLegendFontOffset = '0'
+	ChartLegendFontScaling = '100'
+}
+add-pivotchart - @Parameters
 
 # Save the workbook and close it.  If the Show parameter is set to $true, the workbook will be displayed when the script completes.
 $Excel.Save()
