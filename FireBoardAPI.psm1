@@ -55,7 +55,7 @@ function Get-FireboardAPIKey {
     .SYNOPSIS
        Gets the api key for your fireboard.io account
     #>
-    $Cred = Get-Credential -Message 'Enter your fireboard.io credentials' -Title 'Fireboard.io Credentials'
+    $Cred = Get-Credential -Message 'Enter your fireboard.io credentials'
 
     $response = Invoke-RestMethod -Method POST -Uri 'https://fireboard.io/api/rest-auth/login/' -Verbose:$false -Headers @{
         'Content-Type' = 'application/json'
