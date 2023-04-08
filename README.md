@@ -1,8 +1,7 @@
 # Cooking with PowerShell!
+<br/>
 
-#### The FireBoardAPI is a PowerShell-based API designed to interact with the FireBoard BBQ grill controller. This API enables users to retrieve data from BBQ grills that are equipped with a FireBoard control unit. The FireBoard is a device that logs time series temperature data for wood pellet BBQ grills, and some models can control the cooking temperature wirelessly.
-
-
+The FireBoardAPI is a PowerShell-based API designed to interact with the FireBoard BBQ grill controller. This API enables users to retrieve data from BBQ grills that are equipped with a FireBoard control unit. The FireBoard is a device that logs time series temperature data for wood pellet BBQ grills, and some models can control the cooking temperature wirelessly.
 
 The FireBoard controller is compatible with various BBQ grills and smokers, including popular models from major brands such as Yoder Smokers, Weber Smokey Mountain Cooker, Big Green Egg, Traeger Pellet Grills, Pit Boss Pellet Grills, Green Mountain Grills, Kamado Joe, Oklahoma Joe's, and Napoleon Grills. However, it's important to note that not all models of these brands may be compatible, so it's best to check the specifications of both your grill and the FireBoard controller before making a purchase. Additionally, some models may require additional adapters or cables to connect the FireBoard controller to the grill.
 
