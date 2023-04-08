@@ -12,7 +12,7 @@
 RootModule = 'FireBoardAPI.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.6'
+ModuleVersion = '1.0.8'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -32,20 +32,20 @@ Copyright = '(c) Carl Demelo. All rights reserved.'
 # Description of the functionality provided by this module
 Description = 'FireBoard API Module'
 
-# Minimum version of the Windows PowerShell engine required by this module
+# Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '5.0'
 
-# Name of the Windows PowerShell host required by this module
+# Name of the PowerShell host required by this module
 # PowerShellHostName = ''
 
-# Minimum version of the Windows PowerShell host required by this module
+# Minimum version of the PowerShell host required by this module
 # PowerShellHostVersion = ''
 
 # Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
 # DotNetFrameworkVersion = ''
 
 # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-# CLRVersion = ''
+# ClrVersion = ''
 
 # Processor architecture (None, X86, Amd64) required by this module
 # ProcessorArchitecture = ''
@@ -69,7 +69,7 @@ PowerShellVersion = '5.0'
 NestedModules = @('FireBoardAPI.psm1')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'add-HashTable', 'convert-DataRowToHashTable', 'Convert-FromCurl', 
+FunctionsToExport = 'join-HashTable', 'convert-DataSetToHashTable', 
                'ConvertFrom-UnixTime', 'ConvertTo-LocalTime', 'Get-FireboardAPIKey', 
                'Get-FireboardDevice', 'get-FireboardDeviceInfo', 'get-FireboardList', 
                'get-FireboardRequest', 'get-FireboardSession', 
@@ -83,7 +83,7 @@ CmdletsToExport = '*'
 VariablesToExport = '*'
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = 'add-HashTable', 'convert-DataRowToHashTable', 'Convert-FromCurl', 
+AliasesToExport = 'join-HashTable', 'convert-DataSetToHashTable', 
                'ConvertFrom-UnixTime', 'ConvertTo-LocalTime', 'Get-FireboardAPIKey', 
                'Get-FireboardDevice', 'get-FireboardDeviceInfo', 'get-FireboardList', 
                'get-FireboardRequest', 'get-FireboardSession', 

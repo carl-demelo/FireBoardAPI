@@ -23,9 +23,12 @@ function Get-FireboardAPIKey {
     #>
     $Cred = Get-Credential -Message 'Enter your fireboard.io credentials'
 
+    # Convert the SecureString to plain text for use with the JSON payload.
+    $CredPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($Cred.Password))
+
     $response = Invoke-RestMethod -Method POST -Uri 'https://fireboard.io/api/rest-auth/login/' -Verbose:$false -Headers @{
         'Content-Type' = 'application/json'
-    } -Body "{`"username`":`"$($Cred.UserName)`",`"password`":`"$($Cred.Password)`"}"
+    } -Body "{`"username`":`"$($Cred.UserName)`",`"password`":`"$($CredPassword)`"}"
     $response.key
 }
 function get-FireboardSession {

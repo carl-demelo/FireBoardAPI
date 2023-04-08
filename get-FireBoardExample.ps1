@@ -40,6 +40,7 @@ if (-not (Get-Module -Name FireBoardAPI -ListAvailable)) {
 
 # This function uses get-credential to prompt for a username and password and retireves an API key for the account.  Please note that the the credentials are passed to the FireBoard API in plain text and are not encrypted.  The API key is returned and can be used for subsequent calls to the API.
 # We pass the API key to the other functions to authenticate the calls.
+try {
 $APIKey = Get-FireboardAPIKey
 
 #Retrieve a list of all sessions for the account, we should restrict this to a specific date range, but for now we will just get all sessions.  I use Out-GridView to display the list of sessions and allow the user to select the session that they want to view.  The selected session is passed to the next function.
@@ -97,7 +98,7 @@ $WSObject = $Excel.Workbook.Worksheets[$Sheet]
 Set-ExcelRange -Worksheet $WSObject  -Range "a1:z9000" -HorizontalAlignment Left
 $Excel.Save()
 
-$Sheet = 'TimeSeriesData'
+$TableName = 'TimeSeriesData'
 
 $Parameters = @{
 	ExcelPackage = $Excel
@@ -107,10 +108,10 @@ $Parameters = @{
     EndRow = 35
     EndColumn = 20
 	AutoSize = $true
-	TableName = $Sheet
+	TableName = $TableName
 	TableStyle = $TableStyle
 	PassThru = $true
-   # PivotTableName    = "$($SheetName)Chart";
+   # PivotTableName    = "$($TableName)Chart";
     ChartType         = "Line";
     IncludePivotChart = $true;
     ShowCategory      = $false;
@@ -119,52 +120,18 @@ $Parameters = @{
     PivotColumns      = "ChannelLabel";
     PivotRows         = "DateTime";
     PivotData         = @{ 'Temperature' = 'Average' };
-    LegendPosition    = 'Bottom';
+  #  LegendPosition    = 'Bottom';
 }
 $Excel = $SessionTimeSeriesData | Select-Object DateTime, ChannelID, ChannelLabel, Temperature, DegreeType | Export-Excel @Parameters
 
 # Apply some basic formatting
-$WSObject = $Excel.Workbook.Worksheets[$Sheet]
-Add-ConditionalFormatting -Worksheet $WSObject -Range "D2:D10000" -DataBarColor Red
-
-
-$Parameters = @{
-	WorkbookPath = $OutputFileName
-	WorksheetName = 'Summary'
-    ChartName = 'SummaryChart'
-
-	ReportData = $SessionTimeSeriesData
-	ChartTitle = 'Temperature'
-	ChartType = 'Line'
-	ChartSubTitle = 'Temperature vs Time'
-	ChartXAxisLabel = 'Time'
-	ChartYAxisLabel = 'Temperature'
-	ChartXAxisRange = 'DateTime'
-	ChartYAxisRange = 'Temperature'
-	ChartSeriesRange = 'ChannelLabel'
-	ChartLegendRange = 'ChannelLabel'
-	ChartLegendPosition = 'Right'
-	ChartLegendOverlay = 'False'
-	ChartLegendInclude = 'True'
-	ChartLegendExclude = 'False'
-	ChartLegendReverse = 'False'
-	ChartLegendFontSize = '11'
-	ChartLegendFontColor = 'Black'
-	ChartLegendFontBold = 'False'
-	ChartLegendFontItalic = 'False'
-	ChartLegendFontUnderline = 'False'
-	ChartLegendFontStrikeout = 'False'
-	ChartLegendFontName = 'Calibri'
-	ChartLegendFontCharset = '1'
-	ChartLegendFontVerticalAlign = 'Baseline'
-	ChartLegendFontHorizontalAlign = 'Left'
-	ChartLegendFontRotation = '0'
-	ChartLegendFontOffset = '0'
-	ChartLegendFontScaling = '100'
-}
-add-pivotchart - @Parameters
+Add-ConditionalFormatting -Worksheet $WSObject -Range "D15:D10000" -DataBarColor Red
 
 # Save the workbook and close it.  If the Show parameter is set to $true, the workbook will be displayed when the script completes.
 $Excel.Save()
 Close-ExcelPackage -ExcelPackage $Excel -Show
-
+}
+catch {
+    $Err = $_ | Out-String
+    Write-Error "An error occurred while processing the script.  The error is: $Err"
+}
