@@ -23,7 +23,7 @@ param (
     Install-Module -Name ImportExcel
 #>
 
-$FileName = "$(Path)\$FileName_$(Get-Date -Format 'yyyyMMdd_HHmmss').xlsx"
+$FileName = "$($Path)\$FileName_$(Get-Date -Format 'yyyyMMdd_HHmmss').xlsx"
 
 $TableStyle = 'Medium3'
 #REQUIRES -Module FireBoardAPI
